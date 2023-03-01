@@ -19,6 +19,6 @@ class Order extends Model
     }
 
     public function status() {
-        return $this->hasOne(Status::class);
+        return $this->hasOne(OrderStatus::class, 'id', 'status_id');
     }
 }
