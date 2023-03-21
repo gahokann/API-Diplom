@@ -107,7 +107,7 @@ class ProfileController extends BaseController
         return $this->sendResponse('', 'User setting update');
     }
 
-    public function company() {
+    // public function company() {
 
-    }
+    // }
 }

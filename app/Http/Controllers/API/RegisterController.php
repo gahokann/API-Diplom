@@ -66,12 +66,13 @@ class RegisterController extends BaseController
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')-> accessToken;
-            $success['name'] =  $user->userInfo->first_name;
+            $success['user'] =  $user;
+            $user->userInfo;
 
             return $this->sendResponse($success, 'User login successfully.');
         }
         else{
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            return $this->sendError('Вы ввели не верные данные!', ['error'=>'Unauthorised']);
         }
     }
 }

@@ -36,5 +36,7 @@ Route::name('order.')->prefix('order')->group(function(){
     Route::get('show/{id}', [App\Http\Controllers\Api\OrderController::class, 'show'])->name("show")->middleware('auth:api'); // Просмотр определённого заказа
 
     // TODO: Function
+    Route::post('store', [App\Http\Controllers\Api\OrderController::class, 'store'])->name("store")->middleware('auth:api'); // Оформление заказа
+    Route::patch('update/{id}', [App\Http\Controllers\Api\OrderController::class, 'update'])->name("update")->middleware('auth:api'); // Оформление заказа
 
 });
