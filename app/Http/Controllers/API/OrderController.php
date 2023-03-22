@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Validator;
 class OrderController extends BaseController
 {
     public function index() {
-        $user = User::find(auth('api')->user()->id);
+        $order = Order::all();
 
-        return $this->sendResponse(OrderResource::collection($user->userOrder), 'All Order User`s');
+
+        return $this->sendResponse(OrderResource::collection($order), 'All Order User`s');
     }
 
     public function show($id)

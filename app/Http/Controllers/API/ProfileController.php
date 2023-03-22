@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Resources\OrderResource;
 use App\Http\Resources\UserIndexResource;
+use App\Models\Order;
 use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +16,8 @@ class ProfileController extends BaseController
 {
     public function index() {
         $user = User::find(auth('api')->user()->id);
+        // $orders = Order::where('user_id', auth('api')->user()->id)->get();
+
 
         return $this->sendResponse(new UserIndexResource($user), 'User profile');
     }

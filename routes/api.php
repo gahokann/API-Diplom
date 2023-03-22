@@ -31,7 +31,7 @@ Route::name('profile.')->prefix('profile')->group(function(){
 });
 
 Route::name('order.')->prefix('order')->group(function(){
-    Route::get('index', [App\Http\Controllers\Api\OrderController::class, 'index'])->name("index")->middleware('auth:api'); // Все заказы пользователя
+    Route::get('index', [App\Http\Controllers\Api\OrderController::class, 'index'])->name("index"); // Все заказы пользователя
     Route::get('activity', [App\Http\Controllers\Api\OrderController::class, 'index'])->name("activity")->middleware('auth:api'); // Активные заказы пользователя
     Route::get('show/{id}', [App\Http\Controllers\Api\OrderController::class, 'show'])->name("show")->middleware('auth:api'); // Просмотр определённого заказа
 
