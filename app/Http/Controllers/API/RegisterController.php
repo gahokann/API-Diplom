@@ -21,10 +21,11 @@ class RegisterController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
+            'phone_number' => 'required|unique:user_infos',
             'first_name' => 'required|string',
             'second_name' => 'required|string',
             'last_name' => 'required|string',
-            'date_birth' => 'required|date',
+            'date' => 'required|date',
             'password' => 'required',
             'c_password' => 'required|same:password',
         ]);
@@ -41,19 +42,21 @@ class RegisterController extends BaseController
             'role_id' => 1,
         ]);
 
-        $userInfo = UserInfo::create([
+        UserInfo::create([
             'user_id' => $user->id,
             'first_name' => $input['first_name'],
             'second_name' => $input['second_name'],
             'last_name' => $input['last_name'],
-            'date_birth' => $input['date_birth'],
+            'date_birth' => $input['date'],
+            'phone_number' => $input['phone_number']
         ]);
 
 
         $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $userInfo->first_name;
+        $success['number__column'] = $user->role_id;
 
-        return $this->sendResponse($success, 'User register successfully.');
+
+        return response($success);
     }
 
     /**
@@ -66,13 +69,12 @@ class RegisterController extends BaseController
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')-> accessToken;
-            $success['user'] =  $user;
-            $user->userInfo;
+            $success['number__column'] = $user->role_id;
 
-            return $this->sendResponse($success, 'User login successfully.');
+            return response($success);
         }
         else{
-            return $this->sendError('Вы ввели не верные данные!', ['error'=>'Unauthorised']);
+            return $this->sendError('Ошибка! Почта или пароль неверны!', ['error' => 'Ошибка!']);
         }
     }
 }

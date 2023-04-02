@@ -19,8 +19,8 @@ return new class extends Migration
             $table->date('last_deleviryDate')->nullable(true);
             $table->string('photo')->nullable(true);
             $table->text('information')->nullable(true);
-            $table->unsignedBigInteger('user_id')->nullable(true);
-            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('employee_id')->nullable(true);
             $table->unsignedBigInteger('status_id');
             $table->timestamps();
 

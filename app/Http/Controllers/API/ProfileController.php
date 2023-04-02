@@ -16,11 +16,11 @@ class ProfileController extends BaseController
 {
     public function index() {
         $user = User::find(auth('api')->user()->id);
-        // $orders = Order::where('user_id', auth('api')->user()->id)->get();
-
-
+        // $user->loadMissing(['userOrder']);
         return $this->sendResponse(new UserIndexResource($user), 'User profile');
     }
+
+
 
     public function changeFIO(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -41,21 +41,22 @@ class ProfileController extends BaseController
             'last_name' => $request->get('last_name'),
         ]);
 
-        return $this->sendResponse('', 'User setting update');
+        return response('ФИО успешно изменено');
     }
 
     public function changeEmail(Request $request) {
         $validator = Validator::make($request->all(), [
-            'old_password' => 'required|string',
-            'email' => 'required|string',
+            'password' => 'required|string',
+            'email' => 'required|string|unique:users',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        if(!Hash::check($request->get('old_password'), auth('api')->user()->password)){ // Проверка пароля
-            return $this->sendResponse('', 'Error! Old Password fail');
+
+        if(!Hash::check($request->get('password'), auth('api')->user()->password)){ // Проверка пароля
+            return $this->sendError('Ошибка! Старый пароль неверен!', '');
         }
 
         $user = User::find(auth('api')->user()->id);
@@ -64,16 +65,21 @@ class ProfileController extends BaseController
             'email' => $request->get('email'),
         ]);
 
-        return $this->sendResponse('', 'User setting update');
+        return response('Адрес электронной почты успешно изменён');
     }
 
     public function changePhone(Request $request) {
         $validator = Validator::make($request->all(), [
+            'password' => 'required|string',
             'phone_number' => 'required|string|max:12',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        if(!Hash::check($request->get('password'), auth('api')->user()->password)){ // Проверка пароля
+            return $this->sendError('Ошибка! Старый пароль неверен!', '');
         }
 
         $user = UserInfo::where('user_id', auth('api')->user()->id);
@@ -83,7 +89,7 @@ class ProfileController extends BaseController
         ]);
 
 
-        return $this->sendResponse('', 'User setting update');
+        return response('Номер телефона успешно изменён');
     }
 
     public function changePassword(Request $request) {
@@ -98,7 +104,7 @@ class ProfileController extends BaseController
         }
 
         if(!Hash::check($request->get('old_password'), auth('api')->user()->password)){ // Проверка пароля
-            return $this->sendResponse('', 'Error! Old Password fail');
+            return $this->sendError('Ошибка! Старый пароль неверен!', '');
         }
 
         $user = User::find(auth('api')->user()->id);
@@ -108,10 +114,7 @@ class ProfileController extends BaseController
         ]);
 
 
-        return $this->sendResponse('', 'User setting update');
+        return response('Пароль успешно изменен');
     }
 
-    // public function company() {
-
-    // }
 }

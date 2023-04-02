@@ -17,8 +17,13 @@ class OrderController extends BaseController
     public function index() {
         $order = Order::all();
 
-
         return $this->sendResponse(OrderResource::collection($order), 'All Order User`s');
+    }
+
+    public function orderUser() {
+        $orders = Order::where('user_id', auth('api')->user()->id)->get();
+
+        return response(OrderResource::collection($orders));
     }
 
     public function show($id)
@@ -43,8 +48,6 @@ class OrderController extends BaseController
             'title' => 'required|string',
             'quantity' => 'required|integer',
             'first_deleviryDate' => 'required|date',
-            'photo' => 'string',
-            'information' => 'string',
         ]);
 
         if($validator->fails()){
@@ -61,7 +64,7 @@ class OrderController extends BaseController
             'status_id' => 1
         ]);
 
-        return $this->sendResponse(true, 'Order created success');
+        return response('Заказ успешно создан');
     }
 
     public function update(Request $request, $id) {

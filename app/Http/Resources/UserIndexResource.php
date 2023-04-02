@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,12 +20,16 @@ class UserIndexResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->userInfo->phone_number,
             'role_name' => $this->role->name,
+            'role_id' => $this->role->id,
             'role_info' => $this->role->info,
-            'company_name' => $this->company->name,
             'first_name' => $this->userInfo->first_name,
+            'company' => $this->company,
             'second_name' => $this->userInfo->second_name,
             'last_name' => $this->userInfo->last_name,
             'date_birth' => $this->userInfo->date_birth,
+            // 'order' => OrderResource::collection($this->whenLoaded('userOrder')),
         ];
     }
 }
+
+// Order::find($this->userOrder)

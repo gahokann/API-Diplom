@@ -21,6 +21,7 @@ Route::name('profile.')->prefix('profile')->group(function(){
     Route::get('index', [App\Http\Controllers\Api\ProfileController::class, 'index'])->name("index")->middleware('auth:api'); // Главная страница пользователя
     Route::get('settings', [App\Http\Controllers\Api\ProfileController::class, 'index'])->name("settings")->middleware('auth:api'); // Страница настроек пользователя
     Route::get('company', [App\Http\Controllers\Api\ProfileController::class, 'company'])->name("company")->middleware('auth:api'); // Страница подтверждение компании
+    Route::get('orderUser', [App\Http\Controllers\Api\OrderController::class, 'orderUser'])->name("orderUser")->middleware('auth:api'); // Заказы пользователя
 
     // TODO: Function
 
@@ -28,6 +29,7 @@ Route::name('profile.')->prefix('profile')->group(function(){
     Route::patch('settings/email', [App\Http\Controllers\Api\ProfileController::class, 'changeEmail'])->name("changeEmail")->middleware('auth:api'); // Изменение Email пользователя
     Route::patch('settings/phone', [App\Http\Controllers\Api\ProfileController::class, 'changePhone'])->name("changePhone")->middleware('auth:api'); // Изменение Номера телефона пользователя
     Route::patch('settings/password', [App\Http\Controllers\Api\ProfileController::class, 'changePassword'])->name("changePassword")->middleware('auth:api'); // Изменение Пароля пользователя
+    Route::post('company/add', [App\Http\Controllers\Api\CompanyController::class, 'store'])->name("companyAdd")->middleware('auth:api'); // Заказы пользователя
 });
 
 Route::name('order.')->prefix('order')->group(function(){
@@ -37,6 +39,11 @@ Route::name('order.')->prefix('order')->group(function(){
 
     // TODO: Function
     Route::post('store', [App\Http\Controllers\Api\OrderController::class, 'store'])->name("store")->middleware('auth:api'); // Оформление заказа
-    Route::patch('update/{id}', [App\Http\Controllers\Api\OrderController::class, 'update'])->name("update")->middleware('auth:api'); // Оформление заказа
+    Route::patch('update/{id}', [App\Http\Controllers\Api\OrderController::class, 'update'])->name("update")->middleware('auth:api'); // Редактирование заказа
+});
 
+Route::name('admin.')->prefix('admin')->group(function(){
+    Route::get('allUser', [App\Http\Controllers\Api\UserController::class, 'allUser'])->name("allUser")->middleware('auth:api'); //Все пользователи системы
+    Route::get('employees', [App\Http\Controllers\Api\UserController::class, 'employees'])->name("employees")->middleware('auth:api'); // Все сотрудники системы
+    Route::get('roles', [App\Http\Controllers\Api\RoleController::class, 'index'])->name("index")->middleware('auth:api'); // Все роли системы
 });
