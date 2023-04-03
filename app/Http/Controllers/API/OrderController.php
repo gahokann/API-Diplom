@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Resources\OrderAdminResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\UserIndexResource;
 use App\Models\Order;
@@ -14,10 +15,11 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends BaseController
 {
-    public function index() {
-        $order = Order::all();
+    public function orderAll() {
+        $orders = Order::all();
 
-        return $this->sendResponse(OrderResource::collection($order), 'All Order User`s');
+
+        return response(OrderAdminResource::collection($orders));
     }
 
     public function orderUser() {

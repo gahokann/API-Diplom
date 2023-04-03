@@ -11,10 +11,10 @@ class Company extends Model
     protected $guarded=[];
 
     public function status() {
-        return $this->hasOne(CompanyStatus::class);
+        return $this->hasOne(CompanyStatus::class, 'id', 'status_id');
     }
 
     public function user() {
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

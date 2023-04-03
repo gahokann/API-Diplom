@@ -33,7 +33,6 @@ Route::name('profile.')->prefix('profile')->group(function(){
 });
 
 Route::name('order.')->prefix('order')->group(function(){
-    Route::get('index', [App\Http\Controllers\Api\OrderController::class, 'index'])->name("index"); // Все заказы пользователя
     Route::get('activity', [App\Http\Controllers\Api\OrderController::class, 'index'])->name("activity")->middleware('auth:api'); // Активные заказы пользователя
     Route::get('show/{id}', [App\Http\Controllers\Api\OrderController::class, 'show'])->name("show")->middleware('auth:api'); // Просмотр определённого заказа
 
@@ -46,4 +45,7 @@ Route::name('admin.')->prefix('admin')->group(function(){
     Route::get('allUser', [App\Http\Controllers\Api\UserController::class, 'allUser'])->name("allUser")->middleware('auth:api'); //Все пользователи системы
     Route::get('employees', [App\Http\Controllers\Api\UserController::class, 'employees'])->name("employees")->middleware('auth:api'); // Все сотрудники системы
     Route::get('roles', [App\Http\Controllers\Api\RoleController::class, 'index'])->name("index")->middleware('auth:api'); // Все роли системы
+    Route::get('orderAll', [App\Http\Controllers\Api\OrderController::class, 'orderAll'])->name("orderAll")->middleware('auth:api'); // Все заказы системы
+    Route::get('companyAll', [App\Http\Controllers\Api\CompanyController::class, 'companyAll'])->name("companyAll")->middleware('auth:api'); // Все компании системы
+
 });
