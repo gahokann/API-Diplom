@@ -47,5 +47,10 @@ Route::name('admin.')->prefix('admin')->group(function(){
     Route::get('roles', [App\Http\Controllers\Api\RoleController::class, 'index'])->name("index")->middleware('auth:api'); // Все роли системы
     Route::get('orderAll', [App\Http\Controllers\Api\OrderController::class, 'orderAll'])->name("orderAll")->middleware('auth:api'); // Все заказы системы
     Route::get('companyAll', [App\Http\Controllers\Api\CompanyController::class, 'companyAll'])->name("companyAll")->middleware('auth:api'); // Все компании системы
+    Route::get('partnerAll', [App\Http\Controllers\Api\PartnerController::class, 'show'])->name("partnerAll")->middleware('auth:api'); // Все партнеры системы
+
+    Route::post('companyStatus', [App\Http\Controllers\Api\CompanyController::class, 'statusCompany'])->name("statusCompany")->middleware('auth:api'); // Изменение статуса компании
+    Route::post('partnerStore', [App\Http\Controllers\Api\PartnerController::class, 'store'])->name("partnerStore")->middleware('auth:api'); // Добавление партнера в систему
+    Route::post('partnerDelete', [App\Http\Controllers\Api\PartnerController::class, 'delete'])->name("partnerDelete")->middleware('auth:api'); // Удаление партнера из системы
 
 });

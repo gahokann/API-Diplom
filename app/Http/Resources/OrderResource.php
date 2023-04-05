@@ -31,6 +31,7 @@ class OrderResource extends JsonResource
             'status_name' => $this->status->name,
             'created_at' => date("d.m.Y", strtotime($this->created_at)),
             'updated_at' => $this->updated_at,
+            'company' => $this->user->company,
         ];
     }
 }

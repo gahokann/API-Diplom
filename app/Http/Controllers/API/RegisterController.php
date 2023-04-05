@@ -28,10 +28,15 @@ class RegisterController extends BaseController
             'date' => 'required|date',
             'password' => 'required',
             'c_password' => 'required|same:password',
-        ]);
+        ],
+        [
+            'email.unique' => 'Данный адрес электронной почты уже существует',
+            'phone_number.unique' => 'Данный номер телефона уже существует',
+        ]
+        );
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError('Validation Error.', $validator->errors()->first());
         }
 
         $input = $request->all();

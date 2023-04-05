@@ -34,14 +34,14 @@ class OrderController extends BaseController
 
         if($order != Null) {
             if(auth('api')->user()->id == $order->user_id) {
-                return $this->sendResponse(new OrderResource($order), new UserIndexResource($order->employee));
+                return response(new OrderResource($order));
             }
             else {
-                return $this->sendResponse('', 'Error 404!');
+                return $this->sendError('', 'Error 404!');
             }
         }
         else {
-            return $this->sendResponse(false, 'Error 404!');
+            return $this->sendError(false, 'Error 404!');
         }
     }
 

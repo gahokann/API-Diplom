@@ -37,4 +37,33 @@ class CompanyController extends BaseController
 
         return response(CompanyResource::collection($companies));
     }
+
+    public function statusCompany(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer',
+            'status' => 'required|integer'
+        ]);
+
+        if($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $company = Company::find($request->get('id'));
+
+        if($company != null) {
+            $company->update([
+                'status_id' => $request->get('status')
+            ]);
+
+            return response('Статус успешно установлен');
+        }
+        else
+        {
+            abort(404);
+        }
+
+
+
+
+    }
 }
