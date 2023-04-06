@@ -22,6 +22,8 @@ class CompanyResource extends JsonResource
             'user_secondName' => $this->user->userInfo->second_name,
             'user_lastName' => $this->user->userInfo->last_name,
             'status_id' => $this->status_id,
+            'phone_number' => $this->phone_number,
+            'inn' => $this->inn,
             'status_name' => $this->status->name,
             'link_web' => $this->link_web,
             'description' => $this->description,

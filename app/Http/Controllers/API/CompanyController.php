@@ -15,6 +15,11 @@ class CompanyController extends BaseController
             'name' => 'required|string',
             'job' => 'required|string',
             'portal' => 'required|string',
+            'inn' => 'required|string',
+            'phone_number' => 'required|string|unique:user_infos'
+        ],
+        [
+            'phone_number' => 'Данный номер телефона уже указан'
         ]);
 
         if($validator->fails()){
@@ -27,6 +32,8 @@ class CompanyController extends BaseController
             'user_id' => auth('api')->user()->id,
             'link_web' => $request->get('portal'),
             'status_id' => 1,
+            'inn' => $request->get('inn'),
+            'phone_number' => $request->get('phone_number')
         ]);
 
         return $this->sendResponse($company, 'Ваша заявка успешно оформлена');

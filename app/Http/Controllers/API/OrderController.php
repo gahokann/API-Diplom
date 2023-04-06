@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Http\Resources\OrderAdminResource;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderUserResource;
 use App\Http\Resources\UserIndexResource;
 use App\Models\Order;
 use App\Models\User;
@@ -19,7 +19,7 @@ class OrderController extends BaseController
         $orders = Order::all();
 
 
-        return response(OrderAdminResource::collection($orders));
+        return response(OrderResource::collection($orders));
     }
 
     public function orderUser() {
@@ -34,7 +34,7 @@ class OrderController extends BaseController
 
         if($order != Null) {
             if(auth('api')->user()->id == $order->user_id) {
-                return response(new OrderResource($order));
+                return response(new OrderUserResource($order));
             }
             else {
                 return $this->sendError('', 'Error 404!');

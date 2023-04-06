@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name', 150);
             $table->unsignedBigInteger('user_id')->unique();
             $table->unsignedBigInteger('status_id');
+            $table->string('inn', 12);
+            $table->string('phone_number', 12)->nullable(false);
             $table->string('link_web');
             $table->text('description');
             $table->timestamps();
