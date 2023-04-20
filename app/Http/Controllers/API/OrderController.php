@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\Notifications\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\OrderResource;
@@ -28,12 +29,19 @@ class OrderController extends BaseController
         return response(OrderResource::collection($orders));
     }
 
+    public function orderEmployee() {
+        $orders = Order::where('employee_id', auth('api')->user()->id)->get();
+
+        return response(OrderResource::collection($orders));
+    }
+
+
     public function show($id)
     {
         $order = Order::find($id);
 
         if($order != Null) {
-            if(auth('api')->user()->id == $order->user_id) {
+            if(auth('api')->user()->id == $order->user_id || auth('api')->user()->id == $order->employee_id || auth('api')->user()->role_id > 1) {
                 return response(new OrderUserResource($order));
             }
             else {
@@ -56,7 +64,7 @@ class OrderController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        Order::create([
+        $order = Order::create([
             'title' => $request->get('title'),
             'quantity' => $request->get('quantity'),
             'first_deleviryDate' => $request->get('first_deleviryDate'),
@@ -65,6 +73,24 @@ class OrderController extends BaseController
             'user_id' => auth('api')->user()->id,
             'status_id' => 1
         ]);
+
+        // ! ==== Уведомления для всех сотрудников при создании заказа ====
+
+        $users = User::where('role_id', '>', 1)->get();
+
+        foreach ($users as  $user) {
+            Helper::create_notification([
+                'status_id' => 8,
+                'description' => 'Пользователь: ' . $order->user->userInfo->first_name . " " . $order->user->userInfo->second_name . " " . $order->user->userInfo->last_name . ' сделал заказ',
+                'order_id' => $order->id,
+                'company_id' => null,
+                'user_id' => $user->id,
+                'employee_id' => null,
+                'initiator' => 'Пользователь',
+            ]);
+        }
+
+        // ! ==== ====
 
         return response('Заказ успешно создан');
     }
@@ -92,5 +118,118 @@ class OrderController extends BaseController
         ]);
 
         return $this->sendResponse(true, 'Order update success');
+    }
+
+    public function orderWork(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'orderID' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $order = Order::find($request->get('orderID'));
+
+        if($order != null && auth('api')->user()->role_id > 1 && $order->employee_id != auth('api')->user()->id && $order->employee_id == null) {
+            $order->update([
+                'employee_id' => auth('api')->user()->id,
+            ]);
+
+            // ! ==== Уведомления пользователю при взятии заказа сотрудником ====
+
+            $arrayNotification = [
+                'status_id' => 3,
+                'description' => 'Сотрудник: ' . auth('api')->user()->userInfo->first_name . " " . auth('api')->user()->userInfo->second_name . " " . auth('api')->user()->userInfo->last_name . " взял ваш заказ №" . $order->id . " в работу.",
+                'order_id' => $order->id,
+                'company_id' => null,
+                'user_id' => $order->user_id,
+                'employee_id' => auth('api')->user()->id,
+                'initiator' => 'Сотрудник',
+            ];
+
+            Helper::create_notification($arrayNotification);
+
+            // ! ==== ====
+
+            return response('Заказ успешно взят в работу');
+        }
+        else
+            return $this->sendError('Ошибка при совершении операции!');
+    }
+
+    public function removeEmployeeOrder(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'orderID' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $order = Order::find($request->get('orderID'));
+
+        if($order != null && auth('api')->user()->role_id > 3 && $order->employee_id != null) {
+            $order->update([
+                'employee_id' => null,
+            ]);
+
+            $arrayNotification = [
+                'status_id' => 4,
+                'description' => 'Руководитель: ' . auth('api')->user()->userInfo->first_name . " " . auth('api')->user()->userInfo->second_name . " " . auth('api')->user()->userInfo->last_name . " с вашего заказа №" . $order->id . ' снял сотрудника.',
+                'order_id' => $order->id,
+                'company_id' => null,
+                'user_id' => $order->user_id,
+                'employee_id' => auth('api')->user()->id,
+                'initiator' => 'Сотрудник',
+            ];
+
+            Helper::create_notification($arrayNotification);
+
+            // ! ==== ====
+
+            return response('Сотрудник успешно снят с заказа!');
+        }
+        else
+            return $this->sendError('Ошибка при совершении операции!');
+    }
+
+    public function changeStatus(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'orderID' => 'required|integer',
+            'status' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $order = Order::find($request->get('orderID'));
+
+
+        if($order != null) {
+            $order->update([
+                'status_id' => $request->get('status')
+            ]);
+
+            $arrayNotification = [
+                'status_id' => 5,
+                'description' => 'Сотрудник: ' . auth('api')->user()->userInfo->first_name . " " . auth('api')->user()->userInfo->second_name . " " . auth('api')->user()->userInfo->last_name . " изменил статус вашего заказа №" . $order->id . ": " .  $order->status->name,
+                'order_id' => $order->id,
+                'company_id' => null,
+                'user_id' => $order->user_id,
+                'employee_id' => auth('api')->user()->id,
+                'initiator' => 'Сотрудник',
+            ];
+
+            Helper::create_notification($arrayNotification);
+
+            return response('Статус успешно изменён');
+        }
+        else
+            return $this->sendError('Ошибка при совершении операции!');
+
+
+
     }
 }

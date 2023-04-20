@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,6 +23,12 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+
+        DB::table('user_infos')->insert([
+            ["user_id" => 1, 'first_name' => 'Демошенков', 'second_name' => 'Сергей', 'last_name' => 'Михайлович', 'phone_number' => '+79778598026', 'date_birth' => '2022-01-01'],
+            ["user_id" => 2, 'first_name' => 'Иванов', 'second_name' => 'Иван', 'last_name' => 'Иванович', 'phone_number' => '+79778298026', 'date_birth' => '2022-01-01'],
+            ["user_id" => 3, 'first_name' => 'Тест', 'second_name' => 'Тест', 'last_name' => 'Тест', 'phone_number' => '+79778578026', 'date_birth' => '2022-01-01'],
+        ]);
     }
 
     /**

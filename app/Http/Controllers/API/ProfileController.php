@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\Notifications\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\OrderResource;
@@ -41,6 +42,18 @@ class ProfileController extends BaseController
             'last_name' => $request->get('last_name'),
         ]);
 
+        $arrayNotification = [
+            'status_id' => 9,
+            'description' => "Произошло изменение личных данных: Фамилия Имя Отчество",
+            'order_id' => null,
+            'company_id' => null,
+            'user_id' => auth('api')->user()->id,
+            'employee_id' => null,
+            'initiator' => 'Пользователь',
+        ];
+
+        Helper::create_notification($arrayNotification);
+
         return response('ФИО успешно изменено');
     }
 
@@ -65,6 +78,18 @@ class ProfileController extends BaseController
             'email' => $request->get('email'),
         ]);
 
+        $arrayNotification = [
+            'status_id' => 9,
+            'description' => "Произошло изменение личных данных: Электронная почта",
+            'order_id' => null,
+            'company_id' => null,
+            'user_id' => auth('api')->user()->id,
+            'employee_id' => null,
+            'initiator' => 'Пользователь',
+        ];
+
+        Helper::create_notification($arrayNotification);
+
         return response('Адрес электронной почты успешно изменён');
     }
 
@@ -87,6 +112,18 @@ class ProfileController extends BaseController
         $user->update([
             'phone_number' => $request->get('phone_number'),
         ]);
+
+        $arrayNotification = [
+            'status_id' => 9,
+            'description' => "Произошло изменение личных данных: Номер телефона",
+            'order_id' => null,
+            'company_id' => null,
+            'user_id' => auth('api')->user()->id,
+            'employee_id' => null,
+            'initiator' => 'Пользователь',
+        ];
+
+        Helper::create_notification($arrayNotification);
 
 
         return response('Номер телефона успешно изменён');
@@ -112,6 +149,18 @@ class ProfileController extends BaseController
         $user->update([
             'password' => Hash::make($request->get('new_password')),
         ]);
+
+        $arrayNotification = [
+            'status_id' => 9,
+            'description' => "Произошло изменение личных данных: Пароль",
+            'order_id' => null,
+            'company_id' => null,
+            'user_id' => auth('api')->user()->id,
+            'employee_id' => null,
+            'initiator' => 'Пользователь',
+        ];
+
+        Helper::create_notification($arrayNotification);
 
 
         return response('Пароль успешно изменен');

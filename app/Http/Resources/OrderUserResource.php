@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -37,14 +38,13 @@ class OrderUserResource extends JsonResource
                 'created_at' => $this->user->company->created_at->format('d.m.Y, h:i'),
                 'updated_at' => $this->user->company->updated_at->format('d.m.Y, h:i'),
             ],
+            'statuses' => OrderStatus::all(),
             'photo' => $this->photo,
             'information' => $this->information,
-            'user' => [
-                'id' => $this->user_id,
-                'firstName' => $this->user->userInfo->first_name,
-                'secondName' => $this->user->userInfo->second_name,
-                'lastName' => $this->user->userInfo->last_name,
-            ],
+            'user_id' => $this->user_id,
+            'user_firstName' => $this->user->userInfo->first_name,
+            'user_secondName' => $this->user->userInfo->second_name,
+            'user_lastName' => $this->user->userInfo->last_name,
             'employee_id' => $this->employee_id,
             'employee' => [
                 'id' => $this->user_id,

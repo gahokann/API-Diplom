@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,6 +24,12 @@ return new class extends Migration
 
             $table->foreign('role_id')->references('id')->on('roles');
         });
+
+        DB::table('users')->insert([
+            ["id" => 1, "email" => "topsamper227@mail.ru", "role_id" => "6", "password" => Hash::make(123456789)],
+            ["id" => 2, "email" => "test@mail.ru", "role_id" => "1", "password" => Hash::make(123456789)],
+            ["id" => 3, "email" => "1@mail.ru", "role_id" => "3", "password" => Hash::make(123456789)],
+        ]);
     }
 
     /**
