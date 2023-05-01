@@ -34,4 +34,16 @@ class User extends Authenticatable
     public function company() {
         return $this->hasOne(Company::class);
     }
+
+    public function manager() {
+        return $this->role_id == 2;
+    }
+
+    public function accountant() {
+        return $this->role_id == 3;
+    }
+
+    public function chief() {
+        return $this->role_id > 3;
+    }
 }

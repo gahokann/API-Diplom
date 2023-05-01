@@ -24,6 +24,7 @@ class UserIndexResource extends JsonResource
             'role_info' => $this->role->info,
             'first_name' => $this->userInfo->first_name,
             'company' => $this->company,
+            'company_name' => empty($this->company->name) ? null : $this->company->name,
             'company_status' => empty($this->company->status->id) ? null : $this->company->status->id,
             'second_name' => $this->userInfo->second_name,
             'last_name' => $this->userInfo->last_name,

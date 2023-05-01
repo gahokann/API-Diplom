@@ -21,6 +21,7 @@ class OrderResource extends JsonResource
             'first_deleviryDate' => date("d.m.Y, h:i", strtotime($this->first_deleviryDate)),
             'last_deleviryDate' => empty($this->last_deleviryDate) ? null : date("d.m.Y", strtotime($this->last_deleviryDate)),
             'company' => $this->user->company,
+            'company_name' => empty($this->company->name) ? null : $this->company->name,
             'photo' => $this->photo,
             'information' => $this->information,
             'user_id' => $this->user_id,
