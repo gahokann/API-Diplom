@@ -45,9 +45,11 @@ class OrderUserResource extends JsonResource
             'user_firstName' => $this->user->userInfo->first_name,
             'user_secondName' => $this->user->userInfo->second_name,
             'user_lastName' => $this->user->userInfo->last_name,
+            'user_photo' => $this->user->userInfo->photo,
             'employee_id' => $this->employee_id,
             'employee' => [
                 'id' => $this->user_id,
+                'photo' => empty($this->employee->userInfo->photo) ? null : $this->employee->userInfo->photo,
                 'firstName' => empty($this->employee->userInfo->first_name) ? null : $this->employee->userInfo->first_name,
                 'secondName' => empty($this->employee->userInfo->second_name) ? null : $this->employee->userInfo->second_name,
                 'lastName' => empty($this->employee->userInfo->last_name) ? null : $this->employee->userInfo->last_name,
@@ -59,6 +61,7 @@ class OrderUserResource extends JsonResource
             'status_name' => $this->status->name,
             'created_at' => date("d.m.Y, h:i", strtotime($this->created_at)),
             'updated_at' => $this->updated_at,
+            'messages' => OrderMessage::collection($this->message)
         ];
     }
 }

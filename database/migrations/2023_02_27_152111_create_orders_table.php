@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->date('first_deleviryDate');
             $table->date('last_deleviryDate')->nullable(true);
-            $table->string('photo')->nullable(true);
+            $table->string('photo_id')->nullable(true);
             $table->text('information')->nullable(true);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('employee_id')->nullable(true);
@@ -26,6 +26,7 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('status_id')->references('id')->on('order_statuses');
+            $table->foreign('employee_id')->references('id')->on('users');
             $table->foreign('employee_id')->references('id')->on('users');
         });
     }

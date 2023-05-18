@@ -33,6 +33,7 @@ Route::name('profile.')->prefix('profile')->group(function(){
     Route::patch('settings/password', [App\Http\Controllers\Api\ProfileController::class, 'changePassword'])->name("changePassword")->middleware('auth:api'); // Изменение Пароля пользователя
     Route::post('company/add', [App\Http\Controllers\Api\CompanyController::class, 'store'])->name("companyAdd")->middleware('auth:api'); // Добавление компании
     Route::post('notification/delete', [App\Http\Controllers\Api\NotificationController::class, 'delete'])->name("notDelete")->middleware('auth:api'); // Удаление уведомления
+    Route::post('changeImage', [App\Http\Controllers\Api\UserController::class, 'changeImage'])->name("changeImage")->middleware('auth:api'); // Имзенение картинки пользователя
 });
 
 Route::name('order.')->prefix('order')->group(function(){
@@ -52,6 +53,8 @@ Route::name('admin.')->prefix('admin')->group(function(){
     Route::get('companyAll', [App\Http\Controllers\Api\CompanyController::class, 'companyAll'])->name("companyAll")->middleware('auth:api'); // Все компании системы
     Route::get('partnerAll', [App\Http\Controllers\Api\PartnerController::class, 'show'])->name("partnerAll")->middleware('auth:api'); // Все партнеры системы
     Route::get('orderEmployee', [App\Http\Controllers\Api\OrderController::class, 'orderEmployee'])->name("orderEmployee")->middleware('auth:api'); // Заказы в работе у сотрудника
+    Route::get('userShow/{id}', [App\Http\Controllers\Api\UserController::class, 'userShow'])->name("userShow")->middleware('auth:api'); // Страница пользователя
+    Route::get('employeeShow/{id}', [App\Http\Controllers\Api\UserController::class, 'employeeShow'])->name("employeeShow")->middleware('auth:api'); // Страница сотрудника
 
     Route::post('companyStatus', [App\Http\Controllers\Api\CompanyController::class, 'statusCompany'])->name("statusCompany")->middleware('auth:api'); // Изменение статуса компании
     Route::post('partnerStore', [App\Http\Controllers\Api\PartnerController::class, 'store'])->name("partnerStore")->middleware('auth:api'); // Добавление партнера в систему

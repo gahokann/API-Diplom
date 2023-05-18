@@ -53,7 +53,8 @@ class RegisterController extends BaseController
             'second_name' => $input['second_name'],
             'last_name' => $input['last_name'],
             'date_birth' => $input['date'],
-            'phone_number' => $input['phone_number']
+            'phone_number' => $input['phone_number'],
+            'photo' => 'storage/users/default.png'
         ]);
 
 

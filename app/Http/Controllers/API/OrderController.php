@@ -42,6 +42,7 @@ class OrderController extends BaseController
 
         if($order != Null) {
             if(auth('api')->user()->id == $order->user_id || auth('api')->user()->id == $order->employee_id || auth('api')->user()->role_id > 1) {
+
                 return response(new OrderUserResource($order));
             }
             else {
@@ -58,17 +59,28 @@ class OrderController extends BaseController
             'title' => 'required|string',
             'quantity' => 'required|integer',
             'first_deleviryDate' => 'required|date',
+            'file' => '',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
+        $imageName = time() . '.' . $request->file->extension();
+
+        $path = 'orders';
+
+        $request->file->storeAs('public/' . $path, $imageName);
+
+        $photo = 'storage'. '/' . $path . '/' . $imageName;
+
+
+
         $order = Order::create([
             'title' => $request->get('title'),
             'quantity' => $request->get('quantity'),
             'first_deleviryDate' => $request->get('first_deleviryDate'),
-            'photo' => $request->get('photo'),
+            'photo' => $photo,
             'information' => $request->get('information'),
             'user_id' => auth('api')->user()->id,
             'status_id' => 1
@@ -232,4 +244,5 @@ class OrderController extends BaseController
 
 
     }
+
 }

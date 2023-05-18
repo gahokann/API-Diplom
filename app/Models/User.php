@@ -46,4 +46,8 @@ class User extends Authenticatable
     public function chief() {
         return $this->role_id > 3;
     }
+
+    public function message() {
+        return $this->hasMany(OrderMessage::class);
+    }
 }
