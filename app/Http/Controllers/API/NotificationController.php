@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class NotificationController extends BaseController
 {
     public function show() {
-        $notifications = Notification::where('user_id', auth('api')->user()->id)->orderBy('created_at', 'desc')->get();
+        $notifications = Notification::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
 
 
         return response(NotificationResource::collection($notifications));

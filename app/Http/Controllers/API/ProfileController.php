@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class ProfileController extends BaseController
 {
     public function index() {
-        $user = User::find(auth('api')->user()->id);
+        $user = User::find(auth()->user()->id);
         // $user->loadMissing(['userOrder']);
         return $this->sendResponse(new UserIndexResource($user), 'User profile');
     }

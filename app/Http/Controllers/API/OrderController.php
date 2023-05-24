@@ -24,7 +24,7 @@ class OrderController extends BaseController
     }
 
     public function orderUser() {
-        $orders = Order::where('user_id', auth('api')->user()->id)->get();
+        $orders = Order::where('user_id', auth()->user()->id)->get();
 
         return response(OrderResource::collection($orders));
     }
